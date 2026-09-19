@@ -16,16 +16,54 @@ class MainScreen extends StatelessWidget {
       body: Column(
         children: [
           const FilterBar(),
+
           Expanded(
             child: BlocBuilder<MetersCubit, MetersState>(
               builder: (context, state) {
+                if (state.isLoading) {
+                  return const Center(child: CircularProgressIndicator());
+                }
+
+                if (state.error != null && state.allMeters.isEmpty) {
+                  return Center(
+                    child: Padding(
+                      padding: const EdgeInsets.all(24),
+                      child: Column(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          const Icon(Icons.error_outline, size: 48),
+                          const SizedBox(height: 16),
+                          Text(state.error!, textAlign: TextAlign.center),
+                          const SizedBox(height: 16),
+                          ElevatedButton(
+                            onPressed: () {
+                              context.read<MetersCubit>().loadMeters();
+                            },
+                            child: const Text('Повторить'),
+                          ),
+                        ],
+                      ),
+                    ),
+                  );
+                }
+
                 final meters = state.filteredMeters;
-                return ListView.builder(
-                  padding: const EdgeInsets.all(16),
-                  itemCount: meters.length,
-                  itemBuilder: (context, index) {
-                    return MeterCard(meter: meters[index]);
+
+                if (meters.isEmpty) {
+                  return const Center(child: Text('Нет подключенных приборов'));
+                }
+
+                return RefreshIndicator(
+                  onRefresh: () async {
+                    await context.read<MetersCubit>().loadMeters();
                   },
+                  child: ListView.builder(
+                    padding: const EdgeInsets.all(16),
+                    itemCount: meters.length,
+                    itemBuilder: (context, index) {
+                      return MeterCard(meter: meters[index]);
+                    },
+                  ),
                 );
               },
             ),

@@ -1,15 +1,15 @@
 import 'package:hive_flutter/hive_flutter.dart';
 
-/// Вспомогательное хранилище тарифов (аналог Realm)
+/// Вспомогательное хранилище тарифов.
 class RealmService {
   static const String boxName = 'tariffs';
 
   static Future<void> init() async {
     await Hive.initFlutter();
+
     final box = await Hive.openBox(boxName);
 
     if (box.isEmpty) {
-      // Тарифная сетка: id, базовая стоимость, норматив
       await box.putAll({
         'water_cold': {
           'id': 'water_cold',
@@ -45,8 +45,13 @@ class RealmService {
 
   static double getPrice(String key) {
     final box = Hive.box(boxName);
+
     final data = box.get(key);
-    if (data is Map) return (data['price'] as num?)?.toDouble() ?? 0.0;
+
+    if (data is Map) {
+      return (data['price'] as num?)?.toDouble() ?? 0.0;
+    }
+
     return 0.0;
   }
 }

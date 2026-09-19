@@ -5,7 +5,7 @@ class MonthlyReading {
   final double value;
   final DateTime date;
 
-  MonthlyReading({
+  const MonthlyReading({
     required this.month,
     required this.value,
     required this.date,
@@ -22,7 +22,7 @@ class Meter {
   final List<MonthlyReading> history;
   final double tariff;
 
-  Meter({
+  const Meter({
     required this.id,
     required this.title,
     required this.serialNumber,
@@ -34,9 +34,14 @@ class Meter {
   });
 
   double get differenceWithPrevious {
-    if (history.length < 2) return 0;
+    if (history.length < 2) {
+      return 0;
+    }
+
     return history.last.value - history[history.length - 2].value;
   }
 
-  double get lastPeriodCost => differenceWithPrevious * tariff;
+  double get lastPeriodCost {
+    return differenceWithPrevious * tariff;
+  }
 }

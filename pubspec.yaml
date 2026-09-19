@@ -1,6 +1,9 @@
 name: zhkh_app_new
+
 description: "Учет показаний ЖКХ"
+
 publish_to: 'none'
+
 version: 1.0.0+1
 
 environment:
@@ -9,22 +12,37 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
+
   cupertino_icons: ^1.0.8
+
+  # State management
   flutter_bloc: ^9.1.1
   equatable: ^2.1.0
+
+  # Charts
   fl_chart: ^1.2.0
+
+  # SQLite
   sqflite: ^2.3.2
   path: ^1.9.0
+
+  # Local storage for tariffs
   hive: ^2.2.3
   hive_flutter: ^1.1.0
-  http: ^1.2.1
+
+  # REST API
+  dio: ^5.0.0
+
+  # Camera + OCR
   camera: ^0.10.5+9
   google_mlkit_text_recognition: ^0.14.0
+
   path_provider: ^2.1.2
 
 dev_dependencies:
   flutter_test:
     sdk: flutter
+
   flutter_lints: ^6.0.0
 
 flutter:
